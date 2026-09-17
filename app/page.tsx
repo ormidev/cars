@@ -132,7 +132,7 @@ function VehicleCard({ vehicle, onEdit, onDelete }: { vehicle: Account; onEdit: 
           {vehicle.imageUrl && <span className="car-photo" style={{ backgroundImage: `url(${vehicle.imageUrl})` }} aria-hidden="true" />}
           <span className="card-topline">
             <span className="provider-mark">{vehicle.vehicle.slice(0, 1).toUpperCase()}</span>
-            <span className="card-labels"><strong>{vehicle.vehicle}</strong><small>Vehicle RFID card</small></span>
+            <span className="card-labels"><strong>{vehicle.vehicle}</strong><small>{vehicle.plateNumber || "No plate number"}</small></span>
             <span className="status"><i /> {accountCount} linked</span>
           </span>
           <span className="balance-label">RFID accounts</span>
@@ -227,6 +227,7 @@ export default function Home() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const vehicle = String(data.get("vehicle") || "").trim();
+    const plateNumber = String(data.get("plateNumber") || "").trim().toUpperCase() || null;
     const easytripAccount = String(data.get("easytripAccount") || "").trim() || null;
     const autosweepAccount = String(data.get("autosweepAccount") || "").trim() || null;
 
@@ -239,7 +240,7 @@ export default function Home() {
     setSaveError("");
     try {
       const imageUrl = photoPreview || null;
-      const input = { vehicle, easytripAccount, autosweepAccount, imageUrl };
+      const input = { vehicle, plateNumber, easytripAccount, autosweepAccount, imageUrl };
       if (editingTarget) {
         const updated = await updateAccount(editingTarget.id, input);
         setVehicles((current) => current.map((item) => item.id === updated.id ? updated : item));
@@ -346,9 +347,9 @@ export default function Home() {
         <div className="modal-scrim" role="presentation" onMouseDown={() => setModalOpen(false)}>
           <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={(event) => event.stopPropagation()}>
             <div className="modal-head"><div><p className="eyebrow">{editingTarget ? "EDIT VEHICLE" : "NEW VEHICLE"}</p><h2 id="modal-title">{editingTarget ? `Edit ${editingTarget.vehicle}` : "Add a vehicle"}</h2></div><button onClick={() => setModalOpen(false)} aria-label="Close"><Icon name="close" /></button></div>
-            <p className="modal-intro">{editingTarget ? "Update the vehicle, RFID accounts, or car photo." : "Add the vehicle name and either one or both RFID account numbers."}</p>
+            <p className="modal-intro">{editingTarget ? "Update the vehicle, plate number, RFID accounts, or car photo." : "Add the vehicle details and either one or both RFID account numbers."}</p>
             <form key={editingTarget?.id || "new"} onSubmit={saveVehicle}>
-              <label>Vehicle<input name="vehicle" placeholder="e.g. Avanza" defaultValue={editingTarget?.vehicle || ""} required /></label>
+              <div className="form-row"><label>Vehicle<input name="vehicle" placeholder="e.g. Avanza" defaultValue={editingTarget?.vehicle || ""} required /></label><label>Plate number<input name="plateNumber" placeholder="e.g. ABC 1234" defaultValue={editingTarget?.plateNumber || ""} maxLength={20} /></label></div>
               <div className="form-row"><label>Easytrip account<input name="easytripAccount" placeholder="e.g. 520018920443" inputMode="numeric" defaultValue={editingTarget?.easytripAccount || ""} /></label><label>Autosweep account<input name="autosweepAccount" placeholder="e.g. 2128807" inputMode="numeric" defaultValue={editingTarget?.autosweepAccount || ""} /></label></div>
               <div className="photo-control"><label className="photo-field">Car photo <span className={`photo-upload ${photoPreview ? "has-preview" : ""}`} style={photoPreview ? { backgroundImage: `url(${photoPreview})` } : undefined}><input name="carImage" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => choosePhoto(event.currentTarget.files?.[0])} /><span>{photoPreview ? "Change photo" : "+ Choose a car photo"}</span><small>JPG, PNG or WebP · maximum 5 MB</small></span></label>{photoPreview && <span className="photo-edit-actions"><button className="edit-crop-button" type="button" onClick={() => setPhotoEditorOpen(true)}>Adjust visible area</button><button className="remove-photo-button" type="button" onClick={() => { setPhotoPreview(""); setPhotoSource(""); setPhotoFile(null); }}>Remove photo</button></span>}</div>
               {saveError && <p className="form-error" role="alert">{saveError}</p>}

@@ -9,6 +9,7 @@ service cloud.firestore {
         && request.auth.uid == userId
         && request.resource.data.keys().hasOnly([
           'vehicle',
+          'plateNumber',
           'easytripAccount',
           'autosweepAccount',
           'imageUrl'
@@ -16,6 +17,9 @@ service cloud.firestore {
         && request.resource.data.vehicle is string
         && request.resource.data.vehicle.size() > 0
         && request.resource.data.vehicle.size() <= 80
+        && (request.resource.data.plateNumber == null
+          || (request.resource.data.plateNumber is string
+            && request.resource.data.plateNumber.size() <= 20))
         && (request.resource.data.easytripAccount == null
           || (request.resource.data.easytripAccount is string
             && request.resource.data.easytripAccount.size() <= 40))

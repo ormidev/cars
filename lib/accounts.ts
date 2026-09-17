@@ -5,6 +5,7 @@ import { getFirebaseServices } from "@/lib/firebase";
 export type Account = {
   id: string;
   vehicle: string;
+  plateNumber: string | null;
   easytripAccount: string | null;
   autosweepAccount: string | null;
   imageUrl: string | null;
@@ -12,6 +13,7 @@ export type Account = {
 
 export type CreateAccountInput = {
   vehicle: string;
+  plateNumber: string | null;
   easytripAccount: string | null;
   autosweepAccount: string | null;
   imageUrl: string | null;
@@ -43,6 +45,7 @@ export async function getAccounts(signal?: AbortSignal): Promise<Account[]> {
     return {
       id: document.id,
       vehicle: String(data.vehicle || ""),
+      plateNumber: data.plateNumber ? String(data.plateNumber) : null,
       easytripAccount: data.easytripAccount ? String(data.easytripAccount) : null,
       autosweepAccount: data.autosweepAccount ? String(data.autosweepAccount) : null,
       imageUrl: data.imageUrl ? String(data.imageUrl) : null,

@@ -9,6 +9,7 @@ their vehicles at `users/{uid}/vehicles/{vehicleId}`. A vehicle document contain
 {
   id: string
   vehicle: string
+  plateNumber: string | null
   easytripAccount: string | null
   autosweepAccount: string | null
   imageUrl: string | null // compressed JPEG thumbnail data URL
