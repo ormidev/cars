@@ -2,8 +2,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Firebase setup
 
-The app uses Firebase Authentication and Cloud Firestore. Each anonymous user stores
-their vehicles at `users/{uid}/vehicles/{vehicleId}`. A vehicle document contains:
+The app uses Firebase Authentication and Cloud Firestore. All visitors share the same
+vehicle collection at `vehicles/{vehicleId}`. Any anonymously authenticated visitor
+can create, edit, or delete every record. A vehicle document contains:
 
 ```ts
 {
@@ -28,8 +29,8 @@ their vehicles at `users/{uid}/vehicles/{vehicleId}`. A vehicle document contain
 6. Restart the Next.js development server after creating `.env.local`.
 
 The Firebase web configuration identifies the project but does not grant database
-access. Access is enforced by `firestore.rules`, which limits every user to their own
-vehicle collection and validates all saved fields.
+access. Access is enforced by `firestore.rules`. The current rules intentionally make
+reads public and allow any anonymous app user to create, edit, and delete shared data.
 
 ## Getting Started
 
