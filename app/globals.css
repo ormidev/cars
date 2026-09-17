@@ -109,9 +109,9 @@ h1 { font-size: clamp(40px, 5vw, 62px); line-height: .99; letter-spacing: -3px; 
 .detail-wide { grid-column: 1 / -1; padding-top: 13px; border-top: 1px solid color-mix(in srgb, var(--accent) 15%, white); }
 .account-list { display: grid; gap: 10px; margin-top: 18px; }
 .account-row { display: flex; align-items: center; gap: 13px; padding: 10px 12px; border: 1px solid #dce3f0; border-radius: 15px; background: #ffffffa8; }
-.account-row > span:last-child { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.account-row small { color: #7d879a; font-size: 9px; font-weight: 750; text-transform: uppercase; letter-spacing: 1px; }
-.account-row strong { overflow: hidden; text-overflow: ellipsis; color: #17213a; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 13px; letter-spacing: .4px; }
+.account-row > span:last-child { min-width: 0; width: 100%; display: grid; grid-template-columns: minmax(66px, 1fr) auto; align-items: center; gap: 10px; }
+.account-row small { color: #7d879a; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.account-row strong { overflow: hidden; text-overflow: ellipsis; color: #17213a; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 16px; line-height: 1; letter-spacing: .35px; text-align: right; }
 .account-logo { width: 36px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 11px; color: white; font-size: 14px; font-weight: 850; }
 .easytrip-logo { background: #ff9f45; }
 .autosweep-logo { background: #2563eb; }
@@ -255,7 +255,8 @@ html[data-theme="dark"] .confirm-actions .save-crop-button { border-color: #6879
   .section-title h2 { font-size: 20px; }
   .section-title p { font-size: 11px; }
   .cards-grid { grid-template-columns: 1fr; }
-  .pass-card, .pass-card__inner { min-height: 275px; }
+  .pass-card, .pass-card__inner { min-height: 300px; }
+  .card-actions { bottom: 12px; }
   .pass-front { padding: 24px; }
   .card-bottomline { left: 24px; right: 24px; bottom: 24px; }
   .balance-label { margin-top: 39px; }
