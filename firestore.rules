@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/vehicles/{vehicleId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'vehicle',
+          'easytripAccount',
+          'autosweepAccount',
+          'imageUrl'
+        ])
+        && request.resource.data.vehicle is string
+        && request.resource.data.vehicle.size() > 0
+        && request.resource.data.vehicle.size() <= 80
+        && (request.resource.data.easytripAccount == null
+          || (request.resource.data.easytripAccount is string
+            && request.resource.data.easytripAccount.size() <= 40))
+        && (request.resource.data.autosweepAccount == null
+          || (request.resource.data.autosweepAccount is string
+            && request.resource.data.autosweepAccount.size() <= 40))
+        && (request.resource.data.imageUrl == null
+          || (request.resource.data.imageUrl is string
+            && request.resource.data.imageUrl.size() <= 400000
+            && request.resource.data.imageUrl.matches('data:image/jpeg;base64,.*')))
+        && (request.resource.data.easytripAccount != null
+          || request.resource.data.autosweepAccount != null);
+
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
